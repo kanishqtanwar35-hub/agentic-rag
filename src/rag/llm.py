@@ -12,7 +12,7 @@ import time
 
 import requests
 
-MODEL = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
+MODEL = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
 
 
 def extractive_generate(prompt: str) -> str:
@@ -31,7 +31,10 @@ def extractive_generate(prompt: str) -> str:
 
 
 def gemini_generate(prompt: str) -> str:
-    api_key = os.environ.get("GEMINI_API_KEY")
+    # Strip whitespace and a possible UTF-8 BOM. Secrets pasted into a web form
+    # or piped from a file routinely carry both, and either one fails deep in
+    # http.client with a latin-1 codec error once used as a header.
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip().lstrip("﻿").strip()
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is not set")
 
