@@ -34,7 +34,7 @@ def gemini_generate(prompt: str) -> str:
     # Strip whitespace and a possible UTF-8 BOM. Secrets pasted into a web form
     # or piped from a file routinely carry both, and either one fails deep in
     # http.client with a latin-1 codec error once used as a header.
-    api_key = os.environ.get("GEMINI_API_KEY", "").strip().lstrip("﻿").strip()
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip().lstrip("\ufeff").strip()
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is not set")
 
